@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정십이면체 놀이수학</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#fff4fb; --bg2:#eaf6ff;
+  --ink:#33334d; --soft:#6b6b8a;
+  --card:#ffffff; --line:#e4e2f3;
+  --blue:#4dabf7; --purple:#9775fa; --pink:#f783ac; --yellow:#ffd43b; --green:#51cf66; --orange:#ffa94d; --red:#ff6b6b;
+  --tip:#fff9db; --tipline:#ffe066;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color:var(--ink); line-height:1.65; font-size:16px;
+  background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed; background-color:var(--bg1);
+  min-height:100vh; overflow-x:hidden;
+}
+h1,h2,h3,.tab,.btn,.big,.jua{font-family:"Jua","Gowun Dodum",sans-serif;font-weight:400}
+#floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#floaters span{position:absolute;bottom:-60px;opacity:.28;animation:floatUp linear infinite}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-55vh) translateX(30px) rotate(180deg)}
+  100%{transform:translateY(-115vh) translateX(-20px) rotate(360deg)}
+}
+.wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 16px 30px}
+header{text-align:center;margin:10px 0 18px}
+header h1{font-size:clamp(28px,7vw,46px);margin:0;color:#5b4bd6;text-shadow:3px 3px 0 #ffe3f1}
+header p{margin:6px 0 0;font-size:clamp(15px,3.8vw,19px);color:var(--soft)}
+nav.tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+.tab{flex:1 1 140px;max-width:180px;border:none;border-radius:16px;padding:10px 8px;font-size:17px;cursor:pointer;
+  background:#fff;color:var(--ink);box-shadow:0 3px 0 #d9d4f5;transition:transform .15s}
+.tab:hover{transform:translateY(-2px)}
+.tab.on{background:linear-gradient(135deg,#7c6cf2,#f783ac);color:#fff;box-shadow:0 3px 0 #5b4bd6}
+@media (max-width:600px){ .tab{flex:1 1 30%;font-size:15px;padding:9px 4px} }
+section.panel{display:none}
+section.panel.on{display:block;animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:22px;padding:18px;margin:0 0 16px;box-shadow:0 6px 20px rgba(120,100,200,.12);border:2px solid var(--line)}
+.card h2{margin:0 0 10px;font-size:23px;color:#5b4bd6}
+.card h3{margin:14px 0 8px;font-size:19px;color:#7048c8}
+.stage{position:relative;width:100%;height:clamp(280px,80vw,460px);border-radius:18px;
+  background:radial-gradient(circle at 50% 40%,#ffffff,#eef0ff 70%);overflow:hidden;border:2px dashed #d6d1f7}
+.stage canvas{display:block;width:100%!important;height:100%!important;touch-action:none;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.stage .hint-drag{position:absolute;left:10px;bottom:8px;font-size:13px;color:var(--soft);background:#ffffffcc;padding:2px 10px;border-radius:12px;pointer-events:none}
+.stage .counter{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-family:"Jua";font-size:22px;
+  background:#fff;padding:4px 16px;border-radius:20px;box-shadow:0 3px 10px rgba(0,0,0,.1);display:none;white-space:nowrap}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.btn{border:none;border-radius:14px;padding:9px 14px;font-size:16px;cursor:pointer;background:#f1efff;color:#4a3bb5;box-shadow:0 3px 0 #d4cdfa;transition:transform .1s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #d4cdfa}
+.btn.pri{background:linear-gradient(135deg,#7c6cf2,#9775fa);color:#fff;box-shadow:0 3px 0 #5b4bd6}
+.btn.pink{background:#ffe3ef;color:#c2255c;box-shadow:0 3px 0 #fcc2d7}
+.btn.yel{background:#fff3bf;color:#8a6100;box-shadow:0 3px 0 #ffe066}
+.btn.on{background:linear-gradient(135deg,#ffa94d,#f783ac);color:#fff;box-shadow:0 3px 0 #d6336c}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+@media (max-width:600px){ .nums{grid-template-columns:repeat(2,1fr)} }
+.num{background:linear-gradient(160deg,#f5f3ff,#fff0f6);border-radius:18px;padding:12px 6px;text-align:center;border:2px solid #e5dbff}
+.num .big{display:block;font-size:clamp(32px,9vw,44px);line-height:1.1;color:#5b4bd6}
+.num small{font-size:14px;color:var(--soft)}
+.tip{background:var(--tip);border:2px solid var(--tipline);border-radius:16px;padding:12px 14px;margin:12px 0}
+.tip b{color:#8a5a00}
+.eq{font-family:"Jua";font-size:clamp(19px,5vw,26px);text-align:center;margin:6px 0;color:#c2255c}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+input[type=range]{flex:1;min-width:160px;accent-color:#7c6cf2;height:28px}
+.slider-label{font-family:"Jua";font-size:16px;color:var(--soft)}
+/* 전개도 퀴즈 */
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width:600px){ .opts{grid-template-columns:1fr} }
+.opt{border:3px solid var(--line);border-radius:18px;padding:8px;background:#fff;cursor:pointer;text-align:center;transition:border-color .15s, transform .15s}
+.opt:hover{transform:translateY(-2px)}
+.opt.sel{border-color:#7c6cf2;background:#f5f3ff}
+.opt.good{border-color:var(--green);background:#ebfbee}
+.opt.bad{border-color:var(--red);background:#fff5f5}
+.opt .lab{font-family:"Jua";font-size:22px}
+.opt svg{width:100%;height:auto;max-height:230px}
+.opt .why{font-size:14px;margin-top:4px;display:none}
+.opt .why.show{display:block}
+.opt .mini{font-size:13px;padding:5px 10px;margin-top:6px}
+.msg{font-family:"Jua";font-size:19px;margin:10px 0;min-height:1.5em}
+/* 퀴즈 */
+.qtop{display:flex;justify-content:space-between;font-family:"Jua";font-size:19px;color:var(--soft)}
+.qtext{font-family:"Jua";font-size:clamp(20px,5.2vw,26px);margin:12px 0}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (max-width:480px){ .choices{grid-template-columns:1fr} }
+.choice{font-family:"Jua";font-size:20px;padding:14px 10px;border-radius:16px;border:3px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.choice:hover:not(:disabled){border-color:#b197fc}
+.choice.right{background:#ebfbee;border-color:var(--green)}
+.choice.wrong{background:#fff5f5;border-color:var(--red)}
+.feedback{margin:12px 0;padding:12px 14px;border-radius:16px;display:none}
+.feedback.ok{display:block;background:#ebfbee;border:2px solid #8ce99a}
+.feedback.no{display:block;background:#fff5f5;border:2px solid #ffa8a8}
+.final{text-align:center}
+.final .big{font-size:56px;color:#c2255c}
+/* 만들기 */
+.legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:15px;margin:8px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+#makeNet{width:100%;max-width:520px;display:block;margin:0 auto}
+.steps{counter-reset:st;list-style:none;padding:0;margin:0}
+.steps li{position:relative;padding:12px 12px 12px 58px;margin:10px 0;background:#f8f7ff;border-radius:16px;border:2px solid #ebe7ff}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:12px;top:12px;width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#7c6cf2,#f783ac);color:#fff;font-family:"Jua";font-size:20px;display:flex;align-items:center;justify-content:center}
+.steps li b{font-family:"Jua";font-weight:400;font-size:18px;color:#5b4bd6}
+.mission{background:#f8f7ff;border:2px solid #ebe7ff;border-radius:16px;padding:12px 14px;margin:10px 0}
+.mission .q{font-family:"Jua";font-size:18px}
+.mission .ans{display:none;margin-top:8px;background:var(--tip);border:2px solid var(--tipline);border-radius:12px;padding:10px 12px}
+.mission .ans.show{display:block;animation:pop .3s}
+/* 쌍대 표 */
+table.dual{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:16px}
+table.dual th{font-family:"Jua";font-weight:400;font-size:18px;color:#5b4bd6;padding:4px}
+table.dual td{background:#f8f7ff;padding:10px 6px;text-align:center}
+table.dual td:first-child{border-radius:14px 0 0 14px;font-family:"Jua";text-align:left;padding-left:12px}
+table.dual td:last-child{border-radius:0 14px 14px 0}
+.reveal{font-family:"Jua";font-size:15px;border:none;border-radius:12px;padding:6px 10px;background:#fff3bf;color:#8a6100;cursor:pointer;box-shadow:0 2px 0 #ffe066}
+.revealed{font-family:"Jua";font-size:26px;color:#c2255c;animation:pop .3s}
+.arrow{font-family:"Jua";color:var(--soft)}
+/* 해밀턴 */
+#hamBoard{width:100%;max-width:520px;display:block;margin:0 auto;touch-action:manipulation;user-select:none}
+#hamBoard .city{cursor:pointer}
+#hamBoard text{font-family:"Jua";pointer-events:none}
+.hamstat{font-family:"Jua";font-size:19px;text-align:center;margin:8px 0;min-height:1.6em}
+.route{font-family:"Jua";font-size:17px;text-align:center;color:#7048c8;word-break:break-all;min-height:1.4em}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse{animation:pulse 1s infinite}
+.confetti{position:fixed;top:-30px;font-size:26px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+footer{text-align:center;color:var(--soft);font-size:14px;margin-top:20px;padding:14px;border-top:2px dashed #ddd6fb}
+.nogl{padding:30px;text-align:center;color:var(--soft)}
+@media print{
+  body{background:#fff}
+  body *{visibility:hidden}
+  #printArea, #printArea *{visibility:visible}
+  #printArea{position:absolute;left:0;top:0;width:100%;border:none;box-shadow:none}
+  #printArea .noprint{display:none}
+  #makeNet{width:17cm;max-width:none}
+}
+</style>
+</head>
+<body>
+<div id="floaters" aria-hidden="true"></div>
+<div class="wrap">
+<header>
+  <h1>🔷 정십이면체 놀이수학</h1>
+  <p>돌려보고, 접어보고, 풀어보고, 만들어 보자!</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab on" data-tab="t1">🔄 돌려보기</button>
+  <button class="tab" data-tab="t2">📐 전개도</button>
+  <button class="tab" data-tab="t3">❓ 퀴즈</button>
+  <button class="tab" data-tab="t4">✂️ 만들기</button>
+  <button class="tab" data-tab="t5">🔷 너 안에 나 있다</button>
+  <button class="tab" data-tab="t6">🗺️ 세계일주</button>
+</nav>
+
+<!-- ============ 탭1 돌려보기 ============ -->
+<section class="panel on" id="t1">
+  <div class="card">
+    <h2>🔄 정십이면체를 돌려 보세요!</h2>
+    <p>마우스로 끌거나 손가락으로 밀어서 이리저리 돌려 보세요. 면마다 색이 달라서 세어 보기 쉽답니다 🌈</p>
+    <div class="stage" id="stage1"><div class="counter" id="counter1"></div><div class="hint-drag">👆 끌어서 돌리기</div></div>
+    <div class="btns">
+      <button class="btn pri" data-hl="face">면 12개 🔦</button>
+      <button class="btn pri" data-hl="edge">모서리 30개 🔦</button>
+      <button class="btn pri" data-hl="vertex">꼭짓점 20개 🔦</button>
+      <button class="btn" id="reset1">처음으로 ↺</button>
+      <button class="btn yel" id="auto1">자동회전 ▶</button>
+    </div>
+    <div class="nums">
+      <div class="num"><span class="big">12</span><small>면 (정오각형)</small></div>
+      <div class="num"><span class="big">30</span><small>모서리</small></div>
+      <div class="num"><span class="big">20</span><small>꼭짓점</small></div>
+      <div class="num"><span class="big">3</span><small>한 꼭짓점에 모이는 면</small></div>
+    </div>
+    <div class="tip">
+      💡 <b>오일러의 공식</b><br>
+      어떤 볼록한 입체도형이든 <b>면 + 꼭짓점 − 모서리</b>를 계산하면 항상 2가 나온답니다. 정십이면체로 확인해 볼까요?
+      <div class="eq">12 + 20 − 30 = 2 🎉</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>⚽ 정오각형 12개로 만든 공 모양!</h2>
+    <p>정오각형의 한 각은 <b>108°</b>랍니다. 한 꼭짓점에 정오각형 3개가 모이면 108° × 3 = <b>324°</b>예요.
+    평평하게 한 바퀴 돌려면 360°가 필요한데, 324°는 360°보다 <b>36°</b> 작지요. 그래서 이 모자란 틈을 메우려고 종이가 위로 볼록하게 접힌답니다. 이렇게 꼭짓점 20개가 모두 볼록하게 접히면 동글동글한 공 모양이 돼요! 🎈</p>
+    <div class="nums">
+      <div class="num"><span class="big">108°</span><small>한 내각</small></div>
+      <div class="num"><span class="big">324°</span><small>한 꼭짓점 각의 합</small></div>
+      <div class="num"><span class="big">36°</span><small>모자란 각</small></div>
+      <div class="num"><span class="big">12</span><small>정오각형</small></div>
+    </div>
+    <div class="tip">💡 정오각형의 내각 구하기: 오각형은 삼각형 3개로 나눌 수 있어서 내각의 합이 180° × 3 = 540°예요. 각 5개가 모두 같으니까 540° ÷ 5 = <b>108°</b>랍니다.<br>
+    ✨ 덤으로, 모자란 각 36°를 꼭짓점 20개만큼 모두 더하면 36° × 20 = <b>720°</b>! 볼록한 입체도형은 모자란 각을 다 더하면 언제나 720°가 된답니다.</div>
+  </div>
+</section>
+
+<!-- ============ 탭2 전개도 ============ -->
+<section class="panel" id="t2">
+  <div class="card">
+    <h2>📐 전개도를 접어 보세요!</h2>
+    <p>막대를 오른쪽으로 밀면 접히고, 왼쪽으로 밀면 펼쳐져요. 접는 도중에도 끌어서 돌려 볼 수 있답니다 👀</p>
+    <div class="stage" id="stage2"><div class="counter" id="counter2"></div><div class="hint-drag">👆 끌어서 돌리기</div></div>
+    <div class="row" style="margin-top:12px">
+      <span class="slider-label">펼치기</span>
+      <input type="range" id="foldSlider" min="0" max="100" value="0" aria-label="펼치기와 접기">
+      <span class="slider-label">접기</span>
+    </div>
+    <div class="btns">
+      <button class="btn pri" id="foldPlay">천천히 접기 🎬</button>
+      <button class="btn" id="foldReset">처음 전개도로 ↺</button>
+    </div>
+    <div class="tip">💡 이 전개도는 <b>가운데 오각형 1개 + 꽃잎 5개</b>로 된 <b>꽃 모양 2개</b>가 꽃잎끼리 이어진 모양이에요.
+      꽃 모양 하나를 접으면 꽃잎이 일어서서 <b>반쪽 그릇</b> 🥣이 된답니다. 그릇 2개를 서로 <b>엇갈리게</b> 맞물리면 (한쪽 그릇의 뾰족한 곳이 다른 그릇의 오목한 곳에 쏙!) 정십이면체가 완성돼요 🔷</div>
+  </div>
+
+  <div class="card">
+    <h2>🕵️ 어느 것이 정십이면체 전개도일까?</h2>
+    <p>아래 보기 중에서 접었을 때 정십이면체가 되는 것을 <b>2개</b> 골라 보세요. 그리고 "정답 확인"을 눌러 보세요!</p>
+    <div class="opts" id="netOpts"></div>
+    <div class="btns">
+      <button class="btn pri" id="netCheck">정답 확인 ✅</button>
+      <button class="btn" id="netRetry">다시 풀기 ↺</button>
+    </div>
+    <div class="msg" id="netMsg"></div>
+    <div class="tip">🧠 <b>힌트</b><br>
+      정십이면체는 <b>한 꼭짓점에 정오각형이 딱 3개씩</b> 모여야 해요 (108° × 3 = 324°, 360°보다 작아서 볼록하게 접혀요).
+      만약 4개가 모이면 108° × 4 = <b>432°</b>로 360°를 넘어 버려서 종이가 서로 <b>겹치고 말아요</b> 😵<br>
+      또 면이 <b>12개</b> 있어야 하고, 접었을 때 두 면이 같은 자리에 겹치거나 빈 자리가 생기면 안 된답니다.
+    </div>
+  </div>
+</section>
+
+<!-- ============ 탭3 퀴즈 ============ -->
+<section class="panel" id="t3">
+  <div class="card" id="quizCard">
+    <h2>❓ 정십이면체 퀴즈</h2>
+    <div id="quizBody"></div>
+  </div>
+</section>
+
+<!-- ============ 탭4 만들기 ============ -->
+<section class="panel" id="t4">
+  <div class="card" id="printArea">
+    <h2>📐 오려서 접는 전개도 (꽃 모양 1개)</h2>
+    <p class="noprint">가운데 정오각형 1개와 꽃잎 5개, 모두 <b>정오각형 6개</b>로 된 꽃 모양이에요. 이 꽃 모양을 <b>2개</b> 만들어 각각 접은 다음, 엇갈리게 맞물리면 정십이면체 완성이랍니다! ✨</p>
+    <svg id="makeNet" role="img" aria-label="꽃 모양 전개도"></svg>
+    <div class="legend">
+      <span><svg width="40" height="10"><line x1="0" y1="5" x2="40" y2="5" stroke="#333" stroke-width="3.5"/></svg> 자르는 선 ✂️</span>
+      <span><svg width="40" height="10"><line x1="0" y1="5" x2="40" y2="5" stroke="#555" stroke-width="2" stroke-dasharray="6 4"/></svg> 접는 선</span>
+      <span><svg width="26" height="16"><rect x="1" y="1" width="24" height="14" rx="3" fill="#fff3bf" stroke="#333" stroke-width="1.5"/></svg> 풀칠 날개</span>
+    </div>
+    <div class="tip">💡 정오각형의 <b>모든 변의 길이는 같게</b> (예: 4cm), <b>모든 각은 108°</b>가 되도록 그려야 해요. 각도기와 자를 써 보세요 📏<br>
+    풀칠 날개는 옆 꽃잎의 뒤쪽에 붙여요. 날개가 붙은 변과 그 옆 꽃잎의 변이 만나서 하나의 모서리가 된답니다.</div>
+    <div class="btns noprint"><button class="btn yel" id="printBtn">🖨️ 전개도 인쇄하기 (한 변 4cm)</button></div>
+  </div>
+
+  <div class="card">
+    <h2>✂️ 내 손으로 정십이면체 만들기</h2>
+    <ol class="steps">
+      <li><b>📄 종이 방법</b><br>위의 꽃 모양 전개도를 종이에 <b>2개</b> 그려서 (또는 인쇄해서) 자르는 선을 따라 오려요. 두꺼운 도화지를 쓰면 더 튼튼해요.</li>
+      <li><b>🥣 그릇 접기</b><br>점선을 모두 안쪽으로 접은 다음, 꽃잎과 꽃잎을 풀칠 날개로 붙여요. 그러면 <b>반쪽 그릇 2개</b>가 생긴답니다.</li>
+      <li><b>🥤 빨대 방법</b><br>같은 길이로 자른 <b>빨대 30개</b>와 <b>점토 구슬 20개</b>를 준비해요. 점토는 <b>꼭짓점</b>, 빨대는 <b>모서리</b>가 돼요. 빨대 5개와 점토 5개로 <b>오각형부터</b> 만들고, 한 점토에 빨대가 3개씩 꽂히도록 오각형을 이어 붙여 보세요.</li>
+      <li><b>🎉 완성</b><br>그릇 2개를 <b>엇갈리게 맞물려</b> 붙이면 정십이면체 완성! 한쪽 그릇의 튀어나온 꽃잎 끝이 다른 그릇의 오목한 곳에 쏙 들어가요.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>🔎 탐구 미션 <small style="font-size:15px;color:var(--soft)">(눌러서 정답 확인)</small></h2>
+    <div id="missions4"></div>
+  </div>
+</section>
+
+<!-- ============ 탭5 너 안에 나 있다 ============ -->
+<section class="panel" id="t5">
+  <div class="card">
+    <h2>🔷 너 안에 나 있다 — 짝꿍(쌍대) 이야기</h2>
+    <p>정십이면체의 <b>면 12개 한가운데</b>에 점을 하나씩 찍고, 이웃한 면의 점끼리 이어 보세요. 그러면 안쪽에 삼각형 20개로 된 <b>정이십면체</b> 🔶가 짠! 하고 나타난답니다. 이렇게 서로 면과 꼭짓점을 바꾼 도형을 <b>짝꿍(쌍대)</b>이라고 해요.</p>
+    <p>그뿐만이 아니에요! 정십이면체의 꼭짓점 20개 중에서 <b>8개</b>를 잘 골라 이으면 <b>정육면체</b> ⬛가 쏙 들어가요. 그리고 정육면체 안에는 꼭짓점 4개를 하나씩 건너 골라 이은 <b>정사면체</b> 🔺가 또 들어간답니다. 마치 러시아 인형 마트료시카 같지요? 🪆</p>
+  </div>
+  <div class="card">
+    <h2>🪆 겹겹이 들어가는 도형</h2>
+    <p>버튼을 눌러 도형을 켜고 꺼 보세요. 끌어서 돌려 볼 수도 있어요!</p>
+    <div class="stage" id="stage5"><div class="hint-drag">👆 끌어서 돌리기</div></div>
+    <div class="btns">
+      <button class="btn on" data-solid="dodeca">🔷 정십이면체(겉)</button>
+      <button class="btn on" data-solid="icosa">🔶 정이십면체</button>
+      <button class="btn" data-solid="cube">⬛ 정육면체</button>
+      <button class="btn" data-solid="tetra">🔺 정사면체</button>
+      <button class="btn on" id="auto5">자동회전 ⏸</button>
+    </div>
+    <div class="tip">💡 정십이면체의 <b>면 12</b> ↔ 정이십면체의 <b>꼭짓점 12</b><br>
+    정십이면체의 <b>꼭짓점 20</b> ↔ 정이십면체의 <b>면 20</b><br>
+    <b>모서리</b>는 둘 다 <b>30</b>개로 똑같아요! 🤝<br>
+    ⬛ 정육면체를 켜 보면, 정육면체의 모서리 12개가 정십이면체의 면 12개 위에 하나씩 <b>대각선</b>으로 딱 놓여 있는 것도 볼 수 있어요.</div>
+  </div>
+  <div class="card">
+    <h2>📏 쌍대 규칙 창</h2>
+    <table class="dual">
+      <thead><tr><th></th><th>🔷 정십이면체</th><th></th><th>🔶 정이십면체</th></tr></thead>
+      <tbody id="dualBody"></tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>👐 손으로 확인하기</h2>
+    <ol class="steps">
+      <li><b>📍 면 중심에 점 찍기</b><br>정십이면체 모형(또는 위의 3D)에서 면 12개의 한가운데에 점을 하나씩 찍어요. 점이 12개 생겨요.</li>
+      <li><b>🖊️ 이웃 점 잇기</b><br>모서리를 사이에 두고 맞닿은 두 면의 점끼리 선으로 이어요. 모서리 하나마다 선이 하나씩, 모두 30개의 선이 생겨요.</li>
+      <li><b>🔶 정이십면체 등장!</b><br>점 12개와 선 30개가 만드는 모양을 보세요. 정십이면체의 꼭짓점 하나를 둘러싼 점 3개가 삼각형을 이뤄서, 삼각형 20개짜리 정이십면체가 된답니다.</li>
+      <li><b>🔁 거꾸로 하면?</b><br>이번엔 정이십면체의 삼각형 면 20개 한가운데에 점을 찍고 이어 보세요. 다시 정십이면체가 나와요! 서로가 서로의 짝꿍이랍니다 💞</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h2>🧠 규칙을 찾아라</h2>
+    <div id="missions5"></div>
+  </div>
+</section>
+
+<!-- ============ 탭6 해밀턴 ============ -->
+<section class="panel" id="t6">
+  <div class="card">
+    <h2>🗺️ 해밀턴의 세계일주 게임</h2>
+    <p>1857년에 아일랜드의 수학자 <b>해밀턴</b>이 만든 진짜 보드게임이에요! 정십이면체의 <b>꼭짓점 20개를 도시</b> 🏙️, <b>모서리 30개를 길</b> 🛣️이라고 생각해요.
+    <b>모든 도시를 딱 한 번씩</b> 지나서 <b>출발한 도시로 돌아오는</b> 길을 찾아보세요!</p>
+    <div class="tip">💡 <b>놀이 방법</b><br>
+    ① 출발할 도시를 하나 눌러요. ② 길로 이어진 옆 도시(초록 동그라미 🟢)를 차례로 눌러요. ③ 20개 도시를 모두 지난 뒤 출발 도시를 다시 누르면 성공! 🎉<br>
+    도시 이름은 해밀턴의 게임판처럼 알파벳(B, C, D, …)으로 붙였어요.</div>
+    <svg id="hamBoard" viewBox="-230 -230 460 460" role="img" aria-label="해밀턴 게임판"></svg>
+    <div class="hamstat" id="hamStat"></div>
+    <div class="route" id="hamRoute"></div>
+    <div class="btns" style="justify-content:center">
+      <button class="btn" id="hamUndo">↩ 되돌리기</button>
+      <button class="btn" id="hamReset">🔄 다시 시작</button>
+      <button class="btn yel" id="hamHint">💡 힌트</button>
+      <button class="btn pink" id="hamChallenge">🎲 해밀턴 도전</button>
+      <button class="btn" id="hamShow">👀 정답 보기</button>
+    </div>
+    <div class="tip">💡 이 게임판은 정십이면체를 <b>납작하게 눌러 펼친 그림</b>이에요. 꼭짓점 20개, 모서리 30개가 그대로 있고, 맨 바깥의 큰 오각형도 면 하나랍니다. 칸(오각형)을 세어 보면 바깥까지 모두 12개예요!<br>
+    🎲 <b>해밀턴 도전</b>: 해밀턴은 처음 도시 5개를 정해 주고 나머지 길을 찾게 하는 문제를 냈어요. 버튼을 눌러 도전해 보세요!<br>
+    ✨ 이렇게 모든 꼭짓점을 한 번씩 지나 돌아오는 길을 <b>해밀턴 회로</b>라고 해요. 출발점과 방향을 따지지 않으면 정십이면체에는 서로 다른 세계일주 길이 모두 <b>30가지</b> 있답니다.</div>
+  </div>
+</section>
+
+<footer>정십이면체 놀이수학 · 초등 고학년~중학생용 인터랙티브 학습 자료</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===== 수학(기하) 계산: THREE 없이 순수 JS ===== */
+const PHI = (1 + Math.sqrt(5)) / 2;
+const V3 = {
+  add: (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
+  mul: (a, s) => [a[0] * s, a[1] * s, a[2] * s],
+  dot: (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2],
+  cross: (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]],
+  len: (a) => Math.hypot(a[0], a[1], a[2]),
+  norm: (a) => { const l = Math.hypot(a[0], a[1], a[2]); return [a[0] / l, a[1] / l, a[2] / l]; },
+  avg: (pts) => { const s = [0, 0, 0]; pts.forEach(p => { s[0] += p[0]; s[1] += p[1]; s[2] += p[2]; }); return [s[0] / pts.length, s[1] / pts.length, s[2] / pts.length]; }
+};
+
+/* 정십이면체: 꼭짓점 20개 (앞의 8개는 정육면체의 꼭짓점), 모서리 30개, 면 12개 */
+function buildDodeca() {
+  const p = PHI, q = 1 / PHI;
+  const V = [];
+  for (const x of [-1, 1]) for (const y of [-1, 1]) for (const z of [-1, 1]) V.push([x, y, z]);
+  for (const a of [-1, 1]) for (const b of [-1, 1]) {
+    V.push([0, a * q, b * p]);
+    V.push([a * q, b * p, 0]);
+    V.push([a * p, 0, b * q]);
+  }
+  const edgeLen = 2 / PHI;
+  const E = [];
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++)
+    if (Math.abs(V3.len(V3.sub(V[i], V[j])) - edgeLen) < 1e-6) E.push([i, j]);
+  // 면의 방향(법선) = 정이십면체 꼭짓점 방향
+  const N = [];
+  for (const a of [-1, 1]) for (const b of [-1, 1]) {
+    N.push(V3.norm([0, a * p, b]));
+    N.push(V3.norm([a, 0, b * p]));
+    N.push(V3.norm([a * p, b, 0]));
+  }
+  const F = N.map(n => {
+    const ds = V.map((v, i) => [V3.dot(v, n), i]).sort((A, B) => B[0] - A[0]);
+    const ids = ds.slice(0, 5).map(d => d[1]);
+    const c = V3.avg(ids.map(i => V[i]));
+    const u = V3.norm(V3.sub(V[ids[0]], c));
+    const w = V3.cross(n, u);
+    ids.sort((i, j) => {
+      const di = V3.sub(V[i], c), dj = V3.sub(V[j], c);
+      return Math.atan2(V3.dot(di, w), V3.dot(di, u)) - Math.atan2(V3.dot(dj, w), V3.dot(dj, u));
+    });
+    return ids; // 바깥에서 보면 시계 반대 방향(CCW)
+  });
+  return { V, E, F, N, edgeLen };
+}
+
+/* 두 면이 공유하는 모서리를 따라 이웃 면 찾기 */
+function faceAcross(D, f, a, b) {
+  for (let g = 0; g < D.F.length; g++) {
+    if (g === f) continue;
+    const L = D.F[g];
+    if (L.includes(a) && L.includes(b)) return g;
+  }
+  return -1;
+}
+
+/* 전개도 만들기
+   spec: [[부모번호, 부모의 변 번호], ...]  (0번 = 가운데 뿌리 면)
+   각 면의 0번 변 = 부모와 붙은 변(경첩)  */
+function buildNet(D, spec, rootFace = 0) {
+  const R = 1 / (2 * Math.sin(Math.PI / 5));
+  const root2d = [];
+  for (let i = 0; i < 5; i++) {
+    const t = Math.PI / 2 + i * 2 * Math.PI / 5;
+    root2d.push([R * Math.cos(t), R * Math.sin(t)]);
+  }
+  const nodes = [{ parent: -1, edge: -1, pts: root2d, face: rootFace, vlist: D.F[rootFace].slice(), hinge: null }];
+  const rot = (d, t) => [d[0] * Math.cos(t) - d[1] * Math.sin(t), d[0] * Math.sin(t) + d[1] * Math.cos(t)];
+  spec.forEach(([pi, k]) => {
+    const P = nodes[pi];
+    const A = P.pts[k], B = P.pts[(k + 1) % 5];
+    const pts = [B, A];
+    let d = [A[0] - B[0], A[1] - B[1]];
+    for (let s = 2; s < 5; s++) {
+      d = rot(d, 2 * Math.PI / 5);
+      const last = pts[s - 1];
+      pts.push([last[0] + d[0], last[1] + d[1]]);
+    }
+    const a = P.vlist[k], b = P.vlist[(k + 1) % 5];
+    const g = faceAcross(D, P.face, a, b);
+    const L = D.F[g];
+    const s0 = L.indexOf(b);
+    const vlist = [0, 1, 2, 3, 4].map(i => L[(s0 + i) % 5]);
+    if (vlist[1] !== a) throw new Error('방향 오류');
+    nodes.push({ parent: pi, edge: k, pts, face: g, vlist, hinge: [a, b] });
+  });
+  return nodes;
+}
+
+/* 볼록다각형 겹침 검사(분리축) */
+function polysOverlap(P, Q, eps = 1e-6) {
+  for (const poly of [P, Q]) {
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const ax = [-(b[1] - a[1]), b[0] - a[0]];
+      const pr = (pts) => { let mn = Infinity, mx = -Infinity; pts.forEach(p => { const v = p[0] * ax[0] + p[1] * ax[1]; mn = Math.min(mn, v); mx = Math.max(mx, v); }); return [mn, mx]; };
+      const [p0, p1] = pr(P), [q0, q1] = pr(Q);
+      const l = Math.hypot(ax[0], ax[1]);
+      if (Math.min(p1, q1) - Math.max(p0, q0) < eps * l) return false;
+    }
+  }
+  return true;
+}
+function netFlatOverlaps(nodes) {
+  const out = [];
+  for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++)
+    if (polysOverlap(nodes[i].pts, nodes[j].pts)) out.push([i, j]);
+  return out;
+}
+/* 접었을 때 같은 자리에 오는 면 찾기 */
+function netFoldCollisions(nodes) {
+  const seen = {}, out = [];
+  nodes.forEach((n, i) => { if (seen[n.face] !== undefined) out.push([seen[n.face], i]); else seen[n.face] = i; });
+  return out;
+}
+
+/* 전개도 모양들 */
+const NET_SPECS = {
+  // 꽃 A(0~5) + 꽃 B(6~11). 꽃잎 1의 바깥 변에 꽃 B의 꽃잎(6)이 붙고, 6에 꽃 B의 가운데(7)가 붙어요.
+  flower2: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [6, 3], [7, 1], [7, 2], [7, 3], [7, 4]],
+  // 꽃잎이 하나 모자란 11개짜리
+  eleven: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [6, 3], [7, 1], [7, 2], [7, 3]],
+  // 꽃 B를 한 칸 비틀어 붙인 것 (접으면 겹침)
+  twisted: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [6, 2], [7, 1], [7, 2], [7, 3], [7, 4]],
+  // 다른 올바른 전개도 (꽃 B의 꽃잎 하나를 꽃 A의 꽃잎에 옮겨 붙임)
+  other: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [6, 3], [7, 1], [7, 2], [7, 3], [2, 2]]
+};
+
+/* 해밀턴 게임: 정십이면체 그래프(펼친 그림) */
+function buildHamiltonGraph() {
+  const names = 'B C D F G H J K L M N P Q R S T V W X Z'.split(' ');
+  // 0~4: 바깥 오각형, 5~14: 가운데 10개 고리, 15~19: 안쪽 오각형
+  const pos = [], E = [];
+  for (let i = 0; i < 5; i++) {
+    const t = -Math.PI / 2 + i * 2 * Math.PI / 5;
+    pos[i] = [Math.cos(t), Math.sin(t)];
+    pos[5 + 2 * i] = [0.66 * Math.cos(t), 0.66 * Math.sin(t)];
+    const t2 = t + Math.PI / 5;
+    pos[6 + 2 * i] = [0.5 * Math.cos(t2), 0.5 * Math.sin(t2)];
+    pos[15 + i] = [0.25 * Math.cos(t2), 0.25 * Math.sin(t2)];
+    E.push([i, (i + 1) % 5]);
+    E.push([i, 5 + 2 * i]);
+    E.push([15 + i, 15 + (i + 1) % 5]);
+    E.push([6 + 2 * i, 15 + i]);
+  }
+  for (let j = 0; j < 10; j++) E.push([5 + j, 5 + (j + 1) % 10]);
+  const adj = names.map(() => []);
+  E.forEach(([a, b]) => { adj[a].push(b); adj[b].push(a); });
+  return { names, pos, E, adj };
+}
+
+/* 지금까지의 길을 이어서 모든 도시를 돌고 돌아오는 길 찾기 (없으면 null) */
+function hamiltonComplete(adj, path) {
+  const n = adj.length;
+  if (path.length === 0) path = [0];
+  const used = new Array(n).fill(false);
+  path.forEach(v => used[v] = true);
+  const p = path.slice();
+  const start = p[0];
+  function dfs() {
+    if (p.length === n) return adj[p[n - 1]].includes(start);
+    for (const w of adj[p[p.length - 1]]) {
+      if (used[w]) continue;
+      used[w] = true; p.push(w);
+      if (dfs()) return true;
+      used[w] = false; p.pop();
+    }
+    return false;
+  }
+  return dfs() ? p : null;
+}
+function countHamiltonCycles(adj) {
+  const n = adj.length, used = new Array(n).fill(false), p = [0];
+  used[0] = true; let c = 0;
+  (function dfs() {
+    if (p.length === n) { if (adj[p[n - 1]].includes(0)) c++; return; }
+    for (const w of adj[p[p.length - 1]]) if (!used[w]) { used[w] = true; p.push(w); dfs(); p.pop(); used[w] = false; }
+  })();
+  return c / 2; // 방향 두 가지를 하나로
+}
+
+/* ===================== 공통 ===================== */
+const D = buildDodeca();
+const COLORS = ['#ff6b6b', '#ffa94d', '#ffd43b', '#a9e34b', '#51cf66', '#38d9a9', '#3bc9db', '#4dabf7', '#748ffc', '#9775fa', '#da77f2', '#f783ac'];
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
+// 떠다니는 도형 이모지
+(function floaters() {
+  const box = $('#floaters'), em = ['🔷', '🔶', '🔺', '⭐', '🟦', '🟣', '🔷', '⭐'];
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('span');
+    s.textContent = em[i % em.length];
+    s.style.left = (Math.random() * 96) + '%';
+    s.style.fontSize = (18 + Math.random() * 26) + 'px';
+    const dur = 16 + Math.random() * 18;
+    s.style.animationDuration = dur + 's';
+    s.style.animationDelay = (-Math.random() * dur) + 's';
+    box.appendChild(s);
+  }
+})();
+
+// 탭
+$$('.tab').forEach(b => b.addEventListener('click', () => {
+  $$('.tab').forEach(x => x.classList.toggle('on', x === b));
+  $$('.panel').forEach(p => p.classList.toggle('on', p.id === b.dataset.tab));
+  window.dispatchEvent(new Event('resize'));
+}));
+
+function confetti() {
+  const em = ['🎉', '⭐', '🔷', '✨', '🎊', '💜'];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('div');
+    s.className = 'confetti';
+    s.textContent = em[i % em.length];
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.animationDuration = (1.8 + Math.random() * 1.8) + 's';
+    s.style.animationDelay = Math.random() * 0.6 + 's';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 4500);
+  }
+}
+
+// 눌러서 정답 확인 미션
+function buildMissions(el, list) {
+  el.innerHTML = list.map((m, i) => `
+    <div class="mission">
+      <div class="q">${m.q}</div>
+      <button class="btn yel mini" style="margin-top:8px" data-i="${i}">정답 확인 👀</button>
+      <div class="ans">💡 ${m.a}</div>
+    </div>`).join('');
+  $$('button', el).forEach(b => b.addEventListener('click', () => {
+    const ans = b.nextElementSibling;
+    const show = !ans.classList.contains('show');
+    ans.classList.toggle('show', show);
+    b.textContent = show ? '답 숨기기 🙈' : '정답 확인 👀';
+  }));
+}
+
+/* ===================== 3D 보기 도우미 ===================== */
+const HAS3D = typeof THREE !== 'undefined';
+const viewers = [];
+function makeViewer(el, opt = {}) {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  el.prepend(renderer.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  const camZ = opt.camZ || 6.2;
+  camera.position.set(0, 0, camZ);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const d1 = new THREE.DirectionalLight(0xffffff, 0.7); d1.position.set(3, 4, 5); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, 0.3); d2.position.set(-4, -2, 3); scene.add(d2);
+  const root = new THREE.Group(); scene.add(root);
+  const v = { el, renderer, scene, camera, root, auto: !!opt.auto, autoBoost: 0, vx: 0, vy: 0, onFrame: null, initQ: new THREE.Quaternion() };
+  if (opt.initRot) { root.rotation.set(...opt.initRot); v.initQ.copy(root.quaternion); }
+  v.reset = () => { root.quaternion.copy(v.initQ); v.vx = v.vy = 0; };
+  v.resize = () => {
+    const w = el.clientWidth, h = el.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.position.z = camZ / Math.min(1, camera.aspect * 1.05);
+    camera.updateProjectionMatrix();
+  };
+  const cv = renderer.domElement;
+  let drag = null;
+  const yAxis = new THREE.Vector3(0, 1, 0), xAxis = new THREE.Vector3(1, 0, 0), tq = new THREE.Quaternion();
+  v.spin = (dx, dy) => {
+    tq.setFromAxisAngle(yAxis, dx); root.quaternion.premultiply(tq);
+    tq.setFromAxisAngle(xAxis, dy); root.quaternion.premultiply(tq);
+  };
+  cv.addEventListener('pointerdown', e => {
+    drag = { x: e.clientX, y: e.clientY, t: performance.now() };
+    v.vx = v.vy = 0;
+    cv.setPointerCapture(e.pointerId);
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = (e.clientX - drag.x) * 0.01, dy = (e.clientY - drag.y) * 0.01;
+    v.spin(dx, dy);
+    v.vx = dx; v.vy = dy;
+    drag.x = e.clientX; drag.y = e.clientY;
+  });
+  const end = () => { drag = null; };
+  cv.addEventListener('pointerup', end);
+  cv.addEventListener('pointercancel', end);
+  v.isDragging = () => !!drag;
+  window.addEventListener('resize', v.resize);
+  if (window.ResizeObserver) new ResizeObserver(v.resize).observe(el);
+  v.resize();
+  viewers.push(v);
+  return v;
+}
+let lastT = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+  viewers.forEach(v => {
+    if (!v.el.offsetParent) return; // 안 보이는 탭은 쉬기
+    if (!v.isDragging()) {
+      if (Math.abs(v.vx) + Math.abs(v.vy) > 1e-4) { v.spin(v.vx, v.vy); v.vx *= 0.93; v.vy *= 0.93; }
+      const sp = (v.auto ? 0.5 : 0) + v.autoBoost;
+      if (sp) v.spin(sp * dt, 0);
+    }
+    if (v.onFrame) v.onFrame(dt, now / 1000);
+    v.renderer.render(v.scene, v.camera);
+  });
+  requestAnimationFrame(loop);
+}
+const vec = a => new THREE.Vector3(a[0], a[1], a[2]);
+function polyGeom(pts) {
+  const pos = [];
+  for (let i = 1; i < pts.length - 1; i++) pos.push(...pts[0], ...pts[i], ...pts[i + 1]);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.computeVertexNormals();
+  return g;
+}
+function tube(a, b, r, mat) {
+  const A = vec(a), B = vec(b);
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, A.distanceTo(B), 10, 1), mat);
+  m.position.copy(A).add(B).multiplyScalar(0.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+  return m;
+}
+function noGL() {
+  $$('.stage').forEach(s => { s.innerHTML = '<div class="nogl">😢 3D 그림을 불러오지 못했어요.<br>인터넷에 연결되어 있는지 확인하고 새로고침해 보세요.</div>'; });
+}
+
+/* ===================== 탭1: 돌려보기 ===================== */
+function setupTab1() {
+  const v = makeViewer($('#stage1'), { initRot: [0.35, -0.5, 0] });
+  const faces = D.F.map((f, i) => {
+    const mat = new THREE.MeshStandardMaterial({ color: COLORS[i], flatShading: true, roughness: 0.55, metalness: 0.05, transparent: true, opacity: 1, side: THREE.DoubleSide });
+    const m = new THREE.Mesh(polyGeom(f.map(k => D.V[k])), mat);
+    v.root.add(m);
+    return m;
+  });
+  const EDGE_C = 0x3b3560;
+  const edges = D.E.map(([a, b]) => {
+    const m = tube(D.V[a], D.V[b], 0.028, new THREE.MeshStandardMaterial({ color: EDGE_C, emissive: 0x000000 }));
+    v.root.add(m); return m;
+  });
+  const sph = new THREE.SphereGeometry(0.06, 16, 12);
+  const verts = D.V.map(p => {
+    const m = new THREE.Mesh(sph, new THREE.MeshStandardMaterial({ color: EDGE_C, emissive: 0x000000 }));
+    m.position.copy(vec(p)); v.root.add(m); return m;
+  });
+  const counter = $('#counter1');
+  let hl = null; // {type, start}
+  const CFG = {
+    face: { items: faces, step: 0.28, name: '면' },
+    edge: { items: edges, step: 0.12, name: '모서리' },
+    vertex: { items: verts, step: 0.16, name: '꼭짓점' }
+  };
+  function clearHL() {
+    hl = null; v.autoBoost = 0; counter.style.display = 'none';
+    faces.forEach(m => { m.material.emissive.setHex(0); m.material.opacity = 1; m.material.depthWrite = true; });
+    edges.forEach(m => { m.material.color.setHex(EDGE_C); m.material.emissive.setHex(0); m.scale.set(1, 1, 1); });
+    verts.forEach(m => { m.material.color.setHex(EDGE_C); m.material.emissive.setHex(0); m.scale.set(1, 1, 1); });
+  }
+  $$('[data-hl]').forEach(b => b.addEventListener('click', () => {
+    clearHL();
+    hl = { type: b.dataset.hl, start: performance.now() / 1000 };
+    v.autoBoost = 0.7;
+    counter.style.display = 'block';
+    if (hl.type !== 'face') faces.forEach(m => { m.material.opacity = 0.4; m.material.depthWrite = false; });
+  }));
+  v.onFrame = (dt, t) => {
+    if (!hl) return;
+    const c = CFG[hl.type], n = c.items.length, el = t - hl.start;
+    const lit = Math.min(n, Math.floor(el / c.step) + 1);
+    const glow = 0.5 + 0.5 * Math.sin(el * 7);
+    counter.textContent = lit < n ? `🔦 ${c.name} ${lit} / ${n}` : `✨ ${c.name} 모두 ${n}개!`;
+    c.items.forEach((m, i) => {
+      if (i >= lit) return;
+      const fresh = i === lit - 1 && lit < n;
+      if (hl.type === 'face') {
+        m.material.emissive.setRGB(1, 1, 1).multiplyScalar(fresh ? 0.6 : 0.12 + 0.25 * glow);
+      } else {
+        m.material.color.setHex(hl.type === 'edge' ? 0xffd43b : 0xff4d8d);
+        m.material.emissive.setHex(hl.type === 'edge' ? 0xff9f1a : 0xd6336c).multiplyScalar(0.3 + 0.6 * glow);
+        const s = fresh ? 2.6 : 1.7 + 0.5 * glow;
+        if (hl.type === 'edge') m.scale.set(s, 1, s); else m.scale.set(s, s, s);
+      }
+    });
+    if (el > n * c.step + 3.5) clearHL();
+  };
+  $('#reset1').addEventListener('click', () => { clearHL(); v.reset(); v.auto = false; $('#auto1').textContent = '자동회전 ▶'; $('#auto1').classList.remove('on'); });
+  $('#auto1').addEventListener('click', e => {
+    v.auto = !v.auto;
+    e.target.textContent = v.auto ? '자동회전 ⏸' : '자동회전 ▶';
+    e.target.classList.toggle('on', v.auto);
+  });
+}
+
+/* ===================== 탭2: 전개도 접기 ===================== */
+const FOLD_ALPHA = Math.PI - Math.acos(-1 / Math.sqrt(5)); // 접는 각 = 180° − 이면각(116.57°) = 63.43°
+let foldView = null;
+function setupTab2() {
+  const v = makeViewer($('#stage2'), { camZ: 6.6 });
+  const outer = new THREE.Group(), inner = new THREE.Group();
+  outer.add(inner); v.root.add(outer);
+  let parts = [], nodes = [], foldT = 0, targetScale = 1;
+  function load(specName) {
+    parts.forEach(p => inner.remove(p.mesh));
+    nodes = buildNet(D, NET_SPECS[specName]);
+    parts = nodes.map((n, i) => {
+      const pts = n.vlist.map(k => D.V[k]);
+      const mesh = new THREE.Mesh(polyGeom(pts), new THREE.MeshStandardMaterial({ color: COLORS[i % 12], flatShading: true, roughness: 0.6, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
+      const lineG = new THREE.BufferGeometry().setFromPoints(pts.map(vec));
+      mesh.add(new THREE.LineLoop(lineG, new THREE.LineBasicMaterial({ color: 0x3b3560 })));
+      mesh.matrixAutoUpdate = false;
+      inner.add(mesh);
+      const p = { mesh, node: n, M: new THREE.Matrix4() };
+      if (i > 0) {
+        const a = vec(D.V[n.hinge[0]]), b = vec(D.V[n.hinge[1]]);
+        p.pivot = a; p.axis = b.clone().sub(a).normalize();
+        const test = vec(D.N[n.face]).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(p.axis, FOLD_ALPHA));
+        p.sign = test.dot(vec(D.N[nodes[n.parent].face])) > 0.99 ? 1 : -1;
+        // 꽃 A와 꽃 B를 잇는 경첩(6번)은 마지막에 접어요
+        p.join = i === 6;
+      }
+      return p;
+    });
+    // 펼친 전개도가 화면을 바라보고 가로로 놓이도록 방향 정하기
+    const q0 = new THREE.Quaternion().setFromUnitVectors(vec(D.N[nodes[0].face]), new THREE.Vector3(0, 0, 1));
+    compute(0);
+    const c0 = faceCenter(parts[0]).applyQuaternion(q0), c7 = faceCenter(parts[7]).applyQuaternion(q0);
+    const qz = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.atan2(c7.y - c0.y, c7.x - c0.x));
+    const qt = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.5);
+    outer.quaternion.copy(qt).multiply(qz).multiply(q0);
+    v.reset();
+    compute(foldT);
+  }
+  function faceCenter(p) {
+    const c = new THREE.Vector3();
+    p.node.vlist.forEach(k => c.add(vec(D.V[k]).applyMatrix4(p.M)));
+    return c.multiplyScalar(0.2);
+  }
+  const smooth = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+  const tmp = new THREE.Matrix4(), T1 = new THREE.Matrix4(), T2 = new THREE.Matrix4();
+  let curF = 0;
+  function compute(f) {
+    curF = f;
+    const bowl = smooth(f / 0.6), join = smooth((f - 0.6) / 0.4);
+    parts.forEach((p, i) => {
+      if (i === 0) { p.M.identity(); }
+      else {
+        const amt = (1 - (p.join ? join : bowl)) * FOLD_ALPHA * p.sign;
+        T1.makeTranslation(p.pivot.x, p.pivot.y, p.pivot.z);
+        T2.makeTranslation(-p.pivot.x, -p.pivot.y, -p.pivot.z);
+        tmp.makeRotationAxis(p.axis, amt);
+        p.M.copy(parts[p.node.parent].M).multiply(T1).multiply(tmp).multiply(T2);
+      }
+      p.mesh.matrix.copy(p.M);
+      p.mesh.matrixWorldNeedsUpdate = true;
+    });
+    // 가운데 맞추고 화면에 꽉 차게
+    const box = new THREE.Box3();
+    parts.forEach(p => p.node.vlist.forEach(k => box.expandByPoint(vec(D.V[k]).applyMatrix4(p.M))));
+    const c = box.getCenter(new THREE.Vector3());
+    inner.position.copy(c).multiplyScalar(-1);
+    let r = 0;
+    parts.forEach(p => p.node.vlist.forEach(k => { r = Math.max(r, vec(D.V[k]).applyMatrix4(p.M).distanceTo(c)); }));
+    targetScale = (2.5 - 0.8 * curF) / r;
+  }
+  const slider = $('#foldSlider');
+  let anim = null;
+  const counter = $('#counter2');
+  function setFold(f, fromSlider) {
+    foldT = f;
+    if (!fromSlider) slider.value = Math.round(f * 100);
+    compute(f);
+    counter.style.display = 'block';
+    counter.textContent = f < 0.02 ? '📄 펼친 전개도' : f < 0.6 ? '🌸 꽃잎이 일어나요…' : f < 0.99 ? '🥣🥣 그릇 2개를 맞물려요…' : '🔷 정십이면체 완성!';
+  }
+  slider.addEventListener('input', () => { anim = null; setFold(slider.value / 100, true); });
+  $('#foldPlay').addEventListener('click', () => {
+    const from = foldT >= 0.99 ? 0 : foldT;
+    anim = { from, start: performance.now() / 1000, dur: 6 * (1 - from) + 0.3 };
+  });
+  $('#foldReset').addEventListener('click', () => { anim = null; load('flower2'); setFold(0); });
+  v.onFrame = (dt, t) => {
+    if (anim) {
+      const k = Math.min(1, (t - anim.start) / anim.dur);
+      setFold(anim.from + (1 - anim.from) * k);
+      if (k >= 1) anim = null;
+    }
+    const s = outer.scale.x + (targetScale - outer.scale.x) * Math.min(1, dt * 6);
+    outer.scale.set(s, s, s);
+  };
+  load('flower2');
+  setFold(0);
+  outer.scale.setScalar(targetScale);
+  foldView = { load: name => { anim = null; load(name); setFold(0); outer.scale.setScalar(targetScale); }, play: () => $('#foldPlay').click() };
+}
+
+/* 전개도 SVG 그리기 */
+function netSVG(nodes, fills) {
+  const pts = nodes.flatMap(n => n.pts);
+  const xs = pts.map(p => p[0]), ys = pts.map(p => -p[1]);
+  const pad = 0.15, S = 40;
+  const x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad, w = Math.max(...xs) - x0 + pad, h = Math.max(...ys) - y0 + pad;
+  const polys = nodes.map((n, i) => `<polygon points="${n.pts.map(p => `${(p[0] * S).toFixed(1)},${(-p[1] * S).toFixed(1)}`).join(' ')}" fill="${fills[i]}" stroke="#3b3560" stroke-width="1.6" stroke-linejoin="round"/>`).join('');
+  return `<svg viewBox="${(x0 * S).toFixed(1)} ${(y0 * S).toFixed(1)} ${(w * S).toFixed(1)} ${(h * S).toFixed(1)}">${polys}</svg>`;
+}
+
+/* 어느 것이 전개도일까? */
+function setupNetQuiz() {
+  const OPTS = [
+    { lab: '가', spec: 'eleven', ok: false, why: '❌ 정오각형이 <b>11개</b>뿐이에요. 정십이면체는 면이 12개라서 접으면 한 자리가 뻥 뚫려요 🕳️' },
+    { lab: '나', spec: 'flower2', ok: true, why: '⭕ 꽃 모양 2개가 꽃잎끼리 바르게 이어졌어요. 접으면 한 꼭짓점에 오각형이 딱 3개씩 모인답니다!' },
+    { lab: '다', spec: 'twisted', ok: false, why: '❌ 12개이지만 두 번째 꽃이 한 칸 비틀어 붙었어요. 접으면 <b style="color:#e03131">같은 색 테두리로 표시한 면끼리</b> 같은 자리에 겹치고, 다른 두 자리는 비어 버려요 😵' },
+    { lab: '라', spec: 'other', ok: true, why: '⭕ 꽃잎 하나가 이웃 꽃잎 옆으로 이사 갔지만, 접으면 빈틈도 겹침도 없이 딱 맞아요!' }
+  ];
+  const box = $('#netOpts');
+  const sel = new Set();
+  let checked = false;
+  function render() {
+    box.innerHTML = OPTS.map((o, i) => {
+      const nodes = buildNet(D, NET_SPECS[o.spec]);
+      const fills = nodes.map(() => '#e7f5ff');
+      if (checked && o.spec === 'twisted') {
+        const hot = ['#ffc9c9', '#d0bfff'];
+        netFoldCollisions(nodes).forEach((pair, k) => pair.forEach(j => { fills[j] = hot[k % 2]; }));
+      }
+      const cls = 'opt' + (sel.has(i) ? ' sel' : '') + (checked ? (o.ok ? ' good' : ' bad') : '');
+      return `<div class="${cls}" data-i="${i}"><div class="lab">${sel.has(i) ? '✔️ ' : ''}${o.lab}${checked ? ` (오각형 ${nodes.length}개)` : ''}</div>${netSVG(nodes, fills)}
+        <div class="why ${checked ? 'show' : ''}">${o.why}</div>
+        <button class="btn mini" data-fold="${o.spec}">🎬 위에서 접어 보기</button></div>`;
+    }).join('');
+    $$('.opt', box).forEach(el => el.addEventListener('click', e => {
+      if (e.target.closest('[data-fold]')) return;
+      if (checked) return;
+      const i = +el.dataset.i;
+      if (sel.has(i)) sel.delete(i); else { if (sel.size >= 2) sel.delete([...sel][0]); sel.add(i); }
+      render();
+    }));
+    $$('[data-fold]', box).forEach(b => b.addEventListener('click', () => {
+      if (!foldView) return;
+      foldView.load(b.dataset.fold);
+      $('#stage2').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(foldView.play, 500);
+    }));
+    // 다 의 겹치는 면: 테두리 색 표시
+    if (checked) {
+      const i = OPTS.findIndex(o => o.spec === 'twisted');
+      const nodes = buildNet(D, NET_SPECS.twisted);
+      const polys = $$('.opt', box)[i].querySelectorAll('polygon');
+      const ring = ['#e03131', '#7048e8'];
+      netFoldCollisions(nodes).forEach((pair, k) => pair.forEach(j => { polys[j].setAttribute('stroke', ring[k % 2]); polys[j].setAttribute('stroke-width', '3.5'); }));
+    }
+  }
+  $('#netCheck').addEventListener('click', () => {
+    const msg = $('#netMsg');
+    if (sel.size < 2) { msg.textContent = '🙋 보기를 2개 골라 주세요!'; return; }
+    checked = true;
+    const good = [...sel].every(i => OPTS[i].ok);
+    msg.innerHTML = good ? '🎉 정답이에요! 정답은 <b>나</b>와 <b>라</b>랍니다. 전개도 박사님이네요 👏' : '🤔 아쉬워요! 정답은 <b>나</b>와 <b>라</b>예요. 아래 설명을 읽어 보고, "접어 보기"로 직접 확인해 보세요.';
+    if (good) confetti();
+    render();
+  });
+  $('#netRetry').addEventListener('click', () => { checked = false; sel.clear(); $('#netMsg').textContent = ''; render(); });
+  render();
+}
+
+/* ===================== 탭3: 퀴즈 ===================== */
+const QUIZ = [
+  { q: '🔷 정십이면체의 면은 모두 몇 개일까요?', c: ['8개', '10개', '12개', '20개'], a: 2, ex: '"십이"는 12라는 뜻이에요. 그래서 이름이 정"십이"면체랍니다. 면이 <b>12개</b>예요.' },
+  { q: '🖼️ 정십이면체의 면은 어떤 모양일까요?', c: ['정삼각형', '정사각형', '정오각형', '정육각형'], a: 2, ex: '정십이면체의 면은 모두 똑같은 <b>정오각형</b>이에요. 변이 5개, 각이 5개지요.' },
+  { q: '📏 정십이면체의 모서리는 몇 개일까요?', c: ['12개', '20개', '24개', '30개'], a: 3, ex: '오각형 12개의 변은 5 × 12 = 60개인데, 변 2개가 만나 모서리 1개가 되니까 60 ÷ 2 = <b>30개</b>예요.' },
+  { q: '📍 정십이면체의 꼭짓점은 몇 개일까요?', c: ['12개', '20개', '30개', '32개'], a: 1, ex: '오각형 12개의 꼭짓점은 5 × 12 = 60개인데, 한 꼭짓점에 3개씩 모이니까 60 ÷ 3 = <b>20개</b>예요.' },
+  { q: '🤝 한 꼭짓점에 모이는 면은 몇 개일까요?', c: ['2개', '3개', '4개', '5개'], a: 1, ex: '정오각형 <b>3개</b>가 모여요. 108° × 3 = 324°로 360°보다 작아서 볼록하게 접힌답니다. 4개면 432°라서 겹쳐요!' },
+  { q: '📐 정오각형의 한 내각은 몇 도일까요?', c: ['72°', '90°', '108°', '120°'], a: 2, ex: '오각형의 내각의 합은 180° × 3 = 540°이고, 540° ÷ 5 = <b>108°</b>예요.' },
+  { q: '🧮 정십이면체에서 면 + 꼭짓점 − 모서리는?', c: ['0', '1', '2', '3'], a: 2, ex: '오일러의 공식! 12 + 20 − 30 = <b>2</b>예요. 볼록한 입체도형은 언제나 2가 나온답니다.' }
+];
+const PRAISE = ['🎉 딩동댕! 정답이에요!', '👏 와, 대단해요!', '🌟 완벽해요!', '💯 척척박사네요!', '😆 맞았어요, 최고!'];
+function setupQuiz() {
+  let idx = 0, score = 0, answered = false;
+  const body = $('#quizBody');
+  function show() {
+    answered = false;
+    if (idx >= QUIZ.length) return finish();
+    const Q = QUIZ[idx];
+    body.innerHTML = `
+      <div class="qtop"><span>${idx + 1} / ${QUIZ.length}</span><span>⭐ ${score}점</span></div>
+      <div class="qtext">${Q.q}</div>
+      <div class="choices">${Q.c.map((c, i) => `<button class="choice" data-i="${i}">${'①②③④'[i]} ${c}</button>`).join('')}</div>
+      <div class="feedback" id="fb"></div>
+      <div class="btns" style="justify-content:flex-end"><button class="btn pri" id="qNext" style="display:none">${idx === QUIZ.length - 1 ? '결과 보기 🏆' : '다음 문제 ➡'}</button></div>`;
+    $$('.choice', body).forEach(b => b.addEventListener('click', () => pick(+b.dataset.i)));
+    $('#qNext').addEventListener('click', () => { idx++; show(); });
+  }
+  function pick(i) {
+    if (answered) return;
+    answered = true;
+    const Q = QUIZ[idx], fb = $('#fb'), bs = $$('.choice', body);
+    bs.forEach(b => b.disabled = true);
+    bs[Q.a].classList.add('right');
+    if (i === Q.a) {
+      score++;
+      fb.className = 'feedback ok';
+      fb.innerHTML = `<b>${PRAISE[idx % PRAISE.length]}</b><br>${Q.ex}`;
+    } else {
+      bs[i].classList.add('wrong');
+      fb.className = 'feedback no';
+      fb.innerHTML = `<b>😅 아쉬워요! 정답은 ${'①②③④'[Q.a]} ${Q.c[Q.a]}예요.</b><br>💡 ${Q.ex}`;
+    }
+    $('.qtop span:last-child', body).textContent = `⭐ ${score}점`;
+    $('#qNext').style.display = '';
+  }
+  function finish() {
+    const n = QUIZ.length;
+    const msg = score === n ? '🎓 완벽해요! 이제 정십이면체 박사님이에요!' : score >= 5 ? '🌟 아주 잘했어요! 조금만 더 하면 만점이에요!' : score >= 3 ? '😊 좋아요! "돌려보기" 탭을 한 번 더 보고 다시 도전해 볼까요?' : '💪 괜찮아요! 처음엔 누구나 어려워요. 다시 도전해 보세요!';
+    body.innerHTML = `<div class="final"><div class="qtop" style="justify-content:center">🏁 퀴즈 끝!</div>
+      <div class="big jua">${score} / ${n}</div><p style="font-size:22px">${'⭐'.repeat(score)}${'☆'.repeat(n - score)}</p>
+      <p class="jua" style="font-size:21px">${msg}</p>
+      <button class="btn pri" id="qAgain">다시 풀기 🔁</button></div>`;
+    if (score >= 5) confetti();
+    $('#qAgain').addEventListener('click', () => { idx = 0; score = 0; show(); });
+  }
+  show();
+}
+
+/* ===================== 탭4: 만들기 ===================== */
+function setupMake() {
+  const nodes = buildNet(D, NET_SPECS.flower2.slice(0, 5));
+  const S = 60; // 한 변 = 60 단위 (인쇄하면 4cm)
+  const P = p => [p[0] * S, -p[1] * S];
+  const fmt = p => P(p).map(x => x.toFixed(1)).join(',');
+  const pastel = ['#e7f5ff', '#fff0f6', '#ebfbee', '#fff9db', '#f3f0ff', '#e3fafc'];
+  let tabs = '', polys = '', cuts = '', folds = '', labels = '';
+  const edgeKey = (a, b) => [fmt(a), fmt(b)].sort().join('|');
+  const shared = new Set();
+  nodes.slice(1).forEach(n => shared.add(edgeKey(n.pts[0], n.pts[1])));
+  const tabEdges = new Set();
+  // 꽃잎마다 1번 변에 풀칠 날개 (꽃잎 사이의 틈마다 날개가 하나씩)
+  nodes.slice(1).forEach(n => {
+    const A = n.pts[1], B = n.pts[2];
+    tabEdges.add(edgeKey(A, B));
+    const c = [n.pts.reduce((s, p) => s + p[0], 0) / 5, n.pts.reduce((s, p) => s + p[1], 0) / 5];
+    const d = [B[0] - A[0], B[1] - A[1]];
+    let nr = [-d[1], d[0]];
+    if (nr[0] * ((A[0] + B[0]) / 2 - c[0]) + nr[1] * ((A[1] + B[1]) / 2 - c[1]) < 0) nr = [-nr[0], -nr[1]];
+    const h = 0.22, a1 = h / Math.tan(Math.PI / 6), a2 = h / Math.tan(Math.PI / 3);
+    const q = [A, B, [B[0] - d[0] * a2 + nr[0] * h, B[1] - d[1] * a2 + nr[1] * h], [A[0] + d[0] * a1 + nr[0] * h, A[1] + d[1] * a1 + nr[1] * h]];
+    tabs += `<polygon points="${q.map(fmt).join(' ')}" fill="#fff3bf"/>`;
+    cuts += `<polyline points="${[q[1], q[2], q[3], q[0]].map(fmt).join(' ')}"/>`;
+    const m = [(q[0][0] + q[1][0] + q[2][0] + q[3][0]) / 4, (q[0][1] + q[1][1] + q[2][1] + q[3][1]) / 4];
+    const ang = Math.atan2(-d[1], d[0]) * 180 / Math.PI;
+    const [mx, my] = P(m);
+    labels += `<text x="${mx.toFixed(1)}" y="${my.toFixed(1)}" font-size="9" text-anchor="middle" dominant-baseline="middle" fill="#8a6100" transform="rotate(${(ang > 90 || ang < -90 ? ang + 180 : ang).toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)})">풀칠</text>`;
+  });
+  nodes.forEach((n, i) => {
+    polys += `<polygon points="${n.pts.map(fmt).join(' ')}" fill="${pastel[i]}"/>`;
+    for (let k = 0; k < 5; k++) {
+      const a = n.pts[k], b = n.pts[(k + 1) % 5], key = edgeKey(a, b);
+      const seg = `<line x1="${P(a)[0].toFixed(1)}" y1="${P(a)[1].toFixed(1)}" x2="${P(b)[0].toFixed(1)}" y2="${P(b)[1].toFixed(1)}"/>`;
+      if (shared.has(key) || tabEdges.has(key)) { if (i === 0 || k !== 0) folds += seg; } // 공유 변은 한 번만
+      else cuts += seg;
+    }
+    const c = P([n.pts.reduce((s, p) => s + p[0], 0) / 5, n.pts.reduce((s, p) => s + p[1], 0) / 5]);
+    labels += `<text x="${c[0].toFixed(1)}" y="${c[1].toFixed(1)}" font-size="26" text-anchor="middle" dominant-baseline="central" fill="#5b4bd6">${'①②③④⑤⑥'[i]}</text>`;
+  });
+  const all = [...nodes.flatMap(n => n.pts)].map(P);
+  const pad = 6;
+  const x0 = Math.min(...all.map(p => p[0])) - pad, y0 = Math.min(...all.map(p => p[1])) - pad;
+  const w = Math.max(...all.map(p => p[0])) - x0 + pad, h = Math.max(...all.map(p => p[1])) - y0 + pad;
+  const svg = $('#makeNet');
+  svg.setAttribute('viewBox', `${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
+  svg.innerHTML = `${tabs}${polys}
+    <g stroke="#555" stroke-width="1.6" stroke-dasharray="6 4" fill="none">${folds}</g>
+    <g stroke="#333" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none">${cuts}</g>${labels}`;
+  // 인쇄할 때 한 변이 4cm가 되도록 폭 맞추기
+  const st = document.createElement('style');
+  st.textContent = `@media print{#makeNet{width:${(w / S * 4).toFixed(2)}cm!important}}`;
+  document.head.appendChild(st);
+  $('#printBtn').addEventListener('click', () => window.print());
+
+  buildMissions($('#missions4'), [
+    { q: '① 한 꼭짓점에 모인 정오각형은 몇 개일까요?', a: '<b>3개</b>예요. 108° × 3 = 324°라서 360°보다 36° 모자라고, 그만큼 볼록하게 접혀요.' },
+    { q: '② 한 면과 모서리로 맞닿은 이웃 면은 몇 개일까요?', a: '<b>5개</b>예요. 정오각형은 변이 5개라서, 변마다 이웃 면이 하나씩 붙어 있어요. 꽃 모양의 꽃잎이 5장인 것과 같은 이유랍니다 🌸' },
+    { q: '③ 모서리는 몇 개이고, 길이는 어떨까요?', a: '<b>30개</b>이고, 길이는 <b>모두 같아요</b>! 그래서 빨대로 만들 때 똑같은 길이의 빨대 30개만 있으면 된답니다 🥤' },
+    { q: '④ 어느 면을 바닥에 놓아도 모양이 똑같아 보일까요?', a: '<b>네!</b> 모든 면이 똑같은 정오각형이고, 모든 꼭짓점에 면이 3개씩 똑같이 모이기 때문이에요. 그래서 정십이면체는 주사위로도 쓸 수 있어요 🎲 (12면 주사위!)' }
+  ]);
+}
+
+/* ===================== 탭5: 너 안에 나 있다 ===================== */
+function setupTab5() {
+  const v = makeViewer($('#stage5'), { auto: true, initRot: [0.3, 0.4, 0], camZ: 6.4 });
+  const groups = {};
+  const mk = (name, order) => { const g = new THREE.Group(); g.renderOrder = order; v.root.add(g); groups[name] = g; return g; };
+  const faceMat = (c, o) => new THREE.MeshStandardMaterial({ color: c, transparent: true, opacity: o, side: THREE.DoubleSide, depthWrite: false, flatShading: true, roughness: 0.6 });
+  const edgeMat = c => new THREE.MeshStandardMaterial({ color: c });
+  // 정십이면체(겉)
+  const gD = mk('dodeca', 4);
+  D.F.forEach(f => { const m = new THREE.Mesh(polyGeom(f.map(k => D.V[k])), faceMat(0x74c0fc, 0.16)); m.renderOrder = 4; gD.add(m); });
+  D.E.forEach(([a, b]) => gD.add(tube(D.V[a], D.V[b], 0.018, edgeMat(0x1c7ed6))));
+  // 정이십면체: 면의 중심 12개
+  const gI = mk('icosa', 3);
+  const C = D.F.map(f => V3.avg(f.map(k => D.V[k])));
+  D.V.forEach((_, vi) => {
+    const fs = D.F.map((f, i) => f.includes(vi) ? i : -1).filter(i => i >= 0); // 꼭짓점 하나 → 면 3개 → 삼각형 하나
+    const m = new THREE.Mesh(polyGeom(fs.map(i => C[i])), faceMat(0xffa94d, 0.5)); m.renderOrder = 3; gI.add(m);
+  });
+  for (let i = 0; i < 12; i++) for (let j = i + 1; j < 12; j++)
+    if (D.F[i].filter(k => D.F[j].includes(k)).length === 2) gI.add(tube(C[i], C[j], 0.02, edgeMat(0xe8590c)));
+  const dot = new THREE.SphereGeometry(0.055, 14, 10);
+  C.forEach(c => { const s = new THREE.Mesh(dot, edgeMat(0xd9480f)); s.position.copy(vec(c)); gI.add(s); });
+  // 정육면체: 꼭짓점 0~7 (±1, ±1, ±1)
+  const gC = mk('cube', 2);
+  const cubeV = D.V.slice(0, 8);
+  const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), faceMat(0x495057, 0.28)); box.renderOrder = 2; gC.add(box);
+  for (let i = 0; i < 8; i++) for (let j = i + 1; j < 8; j++)
+    if (Math.abs(V3.len(V3.sub(cubeV[i], cubeV[j])) - 2) < 1e-6) gC.add(tube(cubeV[i], cubeV[j], 0.022, edgeMat(0x212529)));
+  const big = new THREE.SphereGeometry(0.075, 14, 10);
+  cubeV.forEach(p => { const s = new THREE.Mesh(big, edgeMat(0x212529)); s.position.copy(vec(p)); gC.add(s); });
+  // 정사면체: 정육면체 꼭짓점 4개를 하나 건너 하나씩
+  const gT = mk('tetra', 1);
+  const TV = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]];
+  [[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]].forEach(t => { const m = new THREE.Mesh(polyGeom(t.map(i => TV[i])), faceMat(0xff6b6b, 0.6)); m.renderOrder = 1; gT.add(m); });
+  for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++) gT.add(tube(TV[i], TV[j], 0.024, edgeMat(0xc92a2a)));
+  const state = { dodeca: true, icosa: true, cube: false, tetra: false };
+  const apply = () => Object.keys(state).forEach(k => { groups[k].visible = state[k]; });
+  apply();
+  $$('[data-solid]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.solid; state[k] = !state[k]; b.classList.toggle('on', state[k]); apply();
+  }));
+  $('#auto5').addEventListener('click', e => {
+    v.auto = !v.auto; e.target.textContent = v.auto ? '자동회전 ⏸' : '자동회전 ▶'; e.target.classList.toggle('on', v.auto);
+  });
+}
+function setupDualTable() {
+  const rows = [['면', 12, 20], ['꼭짓점', 20, 12], ['모서리', 30, 30], ['한 꼭짓점에 모이는 면', 3, 5]];
+  $('#dualBody').innerHTML = rows.map(r => `<tr><td>${r[0]}</td>
+    <td><button class="reveal">❓ 눌러서 확인</button><span class="revealed" hidden>${r[1]}</span></td>
+    <td class="arrow">↔</td>
+    <td><button class="reveal">❓ 눌러서 확인</button><span class="revealed" hidden>${r[2]}</span></td></tr>`).join('');
+  $$('#dualBody .reveal').forEach(b => b.addEventListener('click', () => { b.hidden = true; b.nextElementSibling.hidden = false; }));
+}
+function setupMissions5() {
+  buildMissions($('#missions5'), [
+    { q: '① 정십이면체의 면 12개의 중심을 이으면 어떤 도형이 나올까요?', a: '<b>정이십면체</b> 🔶가 나와요! 면 12개의 중심이 정이십면체의 꼭짓점 12개가 된답니다.' },
+    { q: '② 정십이면체의 꼭짓점 20개는 정이십면체의 무엇과 같을까요?', a: '정이십면체의 <b>면 20개</b>와 같아요. 정십이면체의 꼭짓점 하나마다 정이십면체의 삼각형 면이 하나씩 생겨요.' },
+    { q: '③ 두 도형의 모서리는 각각 몇 개일까요?', a: '<b>둘 다 30개</b>예요! 정십이면체의 모서리 하나를 가로질러 정이십면체의 모서리가 하나씩 생기기 때문이에요.' },
+    { q: '④ 정십이면체 안에 들어가는 정육면체는 어떻게 만들까요?', a: '정십이면체의 꼭짓점 20개 중 <b>8개</b>를 골라 이으면 정육면체가 돼요. 정육면체의 모서리 12개가 정오각형 12개의 대각선이 된답니다. 고르는 방법을 바꾸면 이런 정육면체가 무려 <b>5가지</b>나 들어가요! 🤩' },
+    { q: '⑤ 정팔면체나 정육면체는 왜 정십이면체의 짝꿍이 될 수 없을까요?', a: '정십이면체와 정이십면체는 한 바퀴의 1/5(72°)만큼 돌려도 똑같아 보이는 <b>다섯 겹 대칭</b>이 있어요 (정오각형 면, 꼭짓점에 모이는 5개의 삼각형). 정육면체와 정팔면체에는 다섯 겹 대칭이 <b>없고</b>, 대신 네 겹 대칭이 있어서 서로끼리 짝꿍이랍니다. 또 정육면체·정팔면체의 모서리는 12개라서 30개인 정십이면체와 맞지 않아요.' }
+  ]);
+}
+
+/* ===================== 탭6: 해밀턴 세계일주 ===================== */
+function setupHamilton() {
+  const G = buildHamiltonGraph();
+  const n = G.names.length, SC = 205;
+  const svg = $('#hamBoard'), stat = $('#hamStat'), routeEl = $('#hamRoute');
+  let path = [], locked = 0, done = false, hintCity = -1;
+  const xy = i => [G.pos[i][0] * SC, G.pos[i][1] * SC];
+  const isEdge = (a, b) => G.adj[a].includes(b);
+  function draw() {
+    const last = path[path.length - 1];
+    const vis = new Set(path);
+    const next = path.length && !done ? G.adj[last].filter(w => !vis.has(w) || (w === path[0] && path.length === n)) : [];
+    const pe = new Set();
+    for (let i = 1; i < path.length; i++) pe.add([path[i - 1], path[i]].sort((a, b) => a - b).join('-'));
+    if (done) pe.add([path[n - 1], path[0]].sort((a, b) => a - b).join('-'));
+    let s = `<circle r="${(SC * 1.08).toFixed(0)}" fill="#f8f7ff" stroke="#ebe7ff" stroke-width="2"/>`;
+    G.E.forEach(([a, b]) => {
+      const [x1, y1] = xy(a), [x2, y2] = xy(b), on = pe.has([a, b].sort((p, q) => p - q).join('-'));
+      s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on ? (done ? '#f76707' : '#7c6cf2') : '#c9c4e6'}" stroke-width="${on ? 7 : 3}" stroke-linecap="round"/>`;
+    });
+    for (let i = 0; i < n; i++) {
+      const [x, y] = xy(i), k = path.indexOf(i);
+      const isStart = k === 0, isLast = i === last && !done, canGo = next.includes(i);
+      const fill = done ? '#ffd43b' : isStart ? '#f783ac' : k >= 0 ? (k < locked ? '#b197fc' : '#9775fa') : '#ffffff';
+      s += `<g class="city" data-i="${i}">
+        <circle cx="${x}" cy="${y}" r="24" fill="transparent"/>
+        ${canGo ? `<circle cx="${x}" cy="${y}" r="21" fill="none" stroke="#40c057" stroke-width="4" ${i === hintCity ? 'class="pulse"' : ''}/>` : ''}
+        ${isLast ? `<circle cx="${x}" cy="${y}" r="22" fill="none" stroke="#f76707" stroke-width="4" class="pulse"/>` : ''}
+        <circle cx="${x}" cy="${y}" r="16" fill="${fill}" stroke="#3b3560" stroke-width="2.5"/>
+        <text x="${x}" y="${y + 1}" font-size="17" text-anchor="middle" dominant-baseline="central" fill="${k >= 0 || done ? '#fff' : '#3b3560'}">${G.names[i]}</text>
+        ${k >= 0 ? `<text x="${x + 17}" y="${y - 15}" font-size="12" fill="#c2255c">${k + 1}</text>` : ''}
+      </g>`;
+    }
+    if (hintCity >= 0) { const [x, y] = xy(hintCity); s += `<text x="${x}" y="${y - 26}" font-size="20" text-anchor="middle">👇</text>`; }
+    svg.innerHTML = s;
+    routeEl.textContent = path.length ? '🧭 ' + path.map(i => G.names[i]).join(' → ') + (done ? ' → ' + G.names[path[0]] + ' 🏠' : '') : '';
+    if (done) stat.innerHTML = '🎉 세계일주 성공! 20개 도시를 모두 돌고 집으로 돌아왔어요! 🏆';
+    else if (!path.length) stat.innerHTML = '🏠 출발할 도시를 하나 눌러 보세요!';
+    else if (path.length === n && !isEdge(last, path[0])) stat.innerHTML = '😮 도시 20개를 다 돌았지만, 출발 도시로 가는 길이 없어요! ↩ 되돌려 보세요.';
+    else if (path.length === n) stat.innerHTML = `🏁 모든 도시를 돌았어요! 이제 출발 도시 <b>${G.names[path[0]]}</b>를 눌러 돌아가세요!`;
+    else if (!next.length) stat.innerHTML = '😵 앗, 갈 수 있는 도시가 없어요! ↩ 되돌리기를 눌러 보세요.';
+    else stat.innerHTML = `🚶 지금 <b>${G.names[last]}</b>에 있어요 · 지나온 도시 ${path.length}개 · 남은 도시 ${n - path.length}개`;
+  }
+  svg.addEventListener('click', e => {
+    const g = e.target.closest('.city'); if (!g || done) return;
+    const i = +g.dataset.i; hintCity = -1;
+    if (!path.length) { path = [i]; return draw(); }
+    const last = path[path.length - 1];
+    if (path.length === n && i === path[0] && isEdge(last, i)) { done = true; confetti(); return draw(); }
+    if (path.includes(i)) {
+      stat.innerHTML = i === last ? '📍 지금 여기에 있어요! 초록 동그라미 도시로 가 보세요.' : '🙅 이미 지나온 도시예요. 도시는 딱 한 번씩만 지나야 해요!';
+      return;
+    }
+    if (!isEdge(last, i)) { stat.innerHTML = `🛣️ <b>${G.names[last]}</b>에서 <b>${G.names[i]}</b>로 바로 가는 길이 없어요. 선으로 이어진 도시를 골라요!`; return; }
+    path.push(i); draw();
+  });
+  $('#hamUndo').addEventListener('click', () => { hintCity = -1; if (done) done = false; else if (path.length > Math.max(locked, 0)) path.pop(); if (path.length < locked) locked = path.length; draw(); });
+  $('#hamReset').addEventListener('click', () => { path = []; locked = 0; done = false; hintCity = -1; draw(); });
+  $('#hamHint').addEventListener('click', () => {
+    if (done) return;
+    if (!path.length) { stat.innerHTML = '💡 어느 도시에서 출발해도 세계일주를 할 수 있어요. 아무 도시나 눌러 보세요!'; return; }
+    const sol = hamiltonComplete(G.adj, path);
+    if (!sol) { stat.innerHTML = '🤔 지금 길로는 세계일주를 끝낼 수 없어요. ↩ 되돌리기로 몇 걸음 돌아가 보세요!'; return; }
+    hintCity = path.length < n ? sol[path.length] : sol[0];
+    draw();
+    stat.innerHTML = `💡 <b>${G.names[hintCity]}</b>(으)로 가 보세요! 👇`;
+  });
+  $('#hamChallenge').addEventListener('click', () => {
+    // 무작위 세계일주 길을 하나 골라 앞의 도시 5개만 알려 주기
+    const start = Math.floor(Math.random() * n);
+    const shuffled = G.adj.map(a => a.slice().sort(() => Math.random() - 0.5));
+    const sol = hamiltonComplete(shuffled, [start]);
+    path = sol.slice(0, 5); locked = 5; done = false; hintCity = -1;
+    draw();
+    stat.innerHTML = `🎲 해밀턴 도전! <b>${path.map(i => G.names[i]).join(' → ')}</b>까지 정해졌어요. 나머지 길을 찾아보세요!`;
+  });
+  $('#hamShow').addEventListener('click', () => {
+    const base = path.length ? path : [0];
+    const sol = hamiltonComplete(G.adj, base) || hamiltonComplete(G.adj, base.slice(0, Math.max(1, locked)));
+    path = sol; done = true; hintCity = -1; draw();
+    stat.innerHTML = '👀 이렇게 가면 세계일주 성공! 다른 길도 찾아볼까요? 🔄 다시 시작을 눌러 보세요.';
+  });
+  draw();
+}
+
+/* ===================== 시작 ===================== */
+setupNetQuiz();
+setupQuiz();
+setupMake();
+setupDualTable();
+setupMissions5();
+setupHamilton();
+if (HAS3D) {
+  try { setupTab1(); setupTab2(); setupTab5(); requestAnimationFrame(loop); }
+  catch (e) { console.error(e); noGL(); }
+} else noGL();
+</script>
+</body>
+</html>
